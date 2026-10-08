@@ -1,0 +1,22 @@
+import { Router } from 'express';
+import * as c from '../controllers/monitoring.controller.js';
+import { validate, validateObjectId } from '../middleware/validation.middleware.js';
+import { authenticate } from '../middleware/auth.middleware.js';
+import { monitoringSchema, listQuerySchema, historyQuerySchema, pageQuerySchema } from '../validators/monitoring.validator.js';
+
+const r = Router();
+r.use(authenticate);
+r.post('/', validate(monitoringSchema), c.create);
+r.get('/', validate(listQuerySchema, 'query'), c.list);
+r.get('/:id', validateObjectId('id'), c.get);
+r.put('/:id', validateObjectId('id'), validate(monitoringSchema), c.update);
+r.delete('/:id', validateObjectId('id'), c.remove);
+r.post('/:id/pause', validateObjectId('id'), c.pause);
+r.post('/:id/resume', validateObjectId('id'), c.resume);
+r.post('/:id/cancel', validateObjectId('id'), c.cancel);
+r.get('/:id/history', validateObjectId('id'), validate(historyQuerySchema, 'query'), c.history);
+r.get('/:id/latest-price', validateObjectId('id'), c.latestPrice);
+r.get('/:id/statistics', validateObjectId('id'), c.statistics);
+r.get('/:id/executions', validateObjectId('id'), validate(pageQuerySchema, 'query'), c.executions);
+r.get('/:id/executions/:executionId', validateObjectId('id', 'executionId'), c.execution);
+export default r;
