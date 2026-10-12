@@ -10,7 +10,7 @@ function AuthForm({ mode }) {
   const isReg = mode === 'register';
   const { login, register } = useAuth();
   const nav = useNavigate();
-  const [f, setF] = useState({ name: '', email: '', password: '' });
+  const [f, setF] = useState({ name: '', email: 'yashmandali211@gmail.com', password: '11221122' });
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState('');
   const set = (k) => (e) => setF({ ...f, [k]: e.target.value });
