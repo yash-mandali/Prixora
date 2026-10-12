@@ -11,7 +11,7 @@ const schema = z.object({
   JWT_SECRET: z.string().min(32, 'JWT_SECRET must be at least 32 characters'),
   JWT_EXPIRES_IN: z.string().default('7d'),
   BCRYPT_ROUNDS: num(12),
-  CORS_ORIGINS: z.string().default('http://localhost:5173'),
+  CORS_ORIGINS: z.string().default('https://prixora.vercel.app/'),
   LOG_LEVEL: z.string().default('info'),
   RUN_WORKER_IN_API: bool.optional(),
   WORKER_POLL_INTERVAL_MS: num(1000),
