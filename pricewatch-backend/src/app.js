@@ -23,6 +23,10 @@ export function createApp() {
   app.use(express.json({ limit: '10kb' }));
   app.use(mongoSanitize());
 
+  app.get("/", (req, res) => {
+    res.json({ message: "Backend is running!" });
+  });
+  
   app.get('/health', (_req, res) => res.json({ status: 'ok' }));
   app.use('/api', apiLimiter);
   app.use('/api/auth', authRoutes);
