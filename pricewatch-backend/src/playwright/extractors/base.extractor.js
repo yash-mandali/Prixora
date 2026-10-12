@@ -125,13 +125,33 @@ export class BaseExtractor {
         }
         return null;
       };
+      const hasUnavailableText = () => {
+        if (!cfg.unavailableText?.length) return false;
+        const title = cfg.name.map((selector) => {
+          try { return document.querySelector(selector); } catch { return null; }
+        }).find(Boolean);
+        if (!title) return false;
+
+        const titleAncestors = new Set();
+        for (let el = title; el && el !== document.body; el = el.parentElement) titleAncestors.add(el);
+        return Array.from(document.querySelectorAll('body *')).some((el) => {
+          if (el.children.length || el.getClientRects().length === 0) return false;
+          const text = el.textContent?.trim().toLowerCase();
+          if (!cfg.unavailableText.some((status) => status.toLowerCase() === text)) return false;
+          for (let ancestor = el; ancestor; ancestor = ancestor.parentElement) {
+            if (titleAncestors.has(ancestor)) return true;
+            if (ancestor === document.body) break;
+          }
+          return false;
+        });
+      };
       return {
         name: pickText(cfg.name),
         priceTexts: pickPriceTexts(cfg.price, { visibleOnly: true }),
         contextPriceTexts: pickPricesAfterName(),
         fallbackPriceTexts: pickPriceTexts(cfg.fallbackPriceSelectors, { visibleOnly: true }),
         image: pickAttr(cfg.image),
-        unavailable: cfg.unavailable.some((s) => document.querySelector(s)),
+        unavailable: cfg.unavailable.some((s) => document.querySelector(s)) || hasUnavailableText(),
       };
     }, { ...this.config, fallbackPriceSelectors: FALLBACK_PRICE_SELECTORS });
   }

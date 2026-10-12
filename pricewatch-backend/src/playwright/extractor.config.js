@@ -17,6 +17,7 @@ export const SITE_SELECTORS = {
     priceWaitTimeoutMs: 2500,
     image: ['img.DByuf4', 'img._396cs4'],
     unavailable: ['button._2AkmmA._2Npkh4'],
+    unavailableText: ['Out of stock'],
   },
   myntra: {
     domains: ['myntra.com'],

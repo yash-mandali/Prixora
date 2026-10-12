@@ -82,6 +82,16 @@ test('Flipkart hyperlocal links fall back to the standard product listing when t
   assert.equal(fallbackUrl.searchParams.has('shopId'), false);
   assert.equal(fallbackUrl.searchParams.has('pageUID'), false);
 });
+test('Flipkart unavailable product status is reported instead of a missing price', async () => {
+  const page = fakePage({
+    dom: { name: 'Flipkart SmartBuy Mouse', unavailable: true },
+  });
+
+  await assert.rejects(
+    new FlipkartExtractor().extract(page, 'https://www.flipkart.com/p/itm1d606a891bdf0'),
+    { code: 'PRODUCT_UNAVAILABLE' },
+  );
+});
 test('extractor: typed errors, never a bad price', async () => {
   await assert.rejects(ex.extract(fakePage({}), 'u'), { code: 'PRICE_NOT_FOUND' });
   await assert.rejects(ex.extract(fakePage({ dom: { priceText: 'N/A' } }), 'u'), { code: 'PRICE_PARSE_FAILED' });
