@@ -1,29 +1,13 @@
 import pino from 'pino';
 
+// const isDev = (process.env.NODE_ENV || 'development') === 'development';
 const isDev = process.env.NODE_ENV === 'development';
-const isTest = process.env.NODE_ENV === 'test';
 
 export const logger = pino({
-  level: isTest ? 'silent' : process.env.LOG_LEVEL || 'info',
+  level: process.env.NODE_ENV === 'test' ? 'silent' : process.env.LOG_LEVEL || 'info',
   redact: {
-    paths: [
-      'req.headers.authorization',
-      'req.headers.cookie',
-      'password',
-      '*.password',
-      'token',
-      '*.token',
-      'passwordHash',
-      '*.passwordHash',
-    ],
+    paths: ['req.headers.authorization', 'req.headers.cookie', 'password', '*.password', 'token', '*.token', 'passwordHash', '*.passwordHash'],
     censor: '[REDACTED]',
   },
-  ...(isDev
-    ? {
-      transport: {
-        target: 'pino-pretty',
-        options: { colorize: true },
-      },
-    }
-    : {}),
+  ...(isDev ? { transport: { target: 'pino-pretty', options: { colorize: true } } } : {}),
 });

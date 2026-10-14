@@ -31,7 +31,7 @@ const schema = z.object({
   SMTP_PORT: num(587),
   SMTP_USER: z.string().optional().default(''),
   SMTP_PASS: z.string().optional().default(''),
-  SMTP_FROM: z.string().default('PriceWatch <no-reply@example.com>'),
+  SMTP_FROM: z.string().default('aiuser4561@gmail.com'),
 });
 
 const parsed = schema.safeParse(process.env);
